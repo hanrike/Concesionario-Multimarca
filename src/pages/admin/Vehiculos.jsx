@@ -123,19 +123,25 @@ const FormularioCreacionVehiculos = ({
   listaVehiculos,
   funcionParaAgrgearUnVehiculo,
 }) => {
-  const [nombre, setNombre] = useState();
-  const [marca, setMarca] = useState();
-  const [modelo, setModelo] = useState();
+  const [nombre, setNombre] = useState('');
+  const [marca, setMarca] = useState('');
+  const [modelo, setModelo] = useState('');
 
   const enviarAlBackend = () => {
     console.log('nombre', nombre, 'marca', marca, 'modelo', modelo);
-    toast.success('Vehículo creado con éxito');
+    if (nombre==='' || marca==='' || modelo===''){
+      toast.error('Ingrese todas las informaciones');
+    }else{
+      toast.success('Vehículo creado con éxito');
     funcionParaMostrarLaTabla(true);
     funcionParaAgrgearUnVehiculo([
       ...listaVehiculos,
       { nombre: nombre, marca: marca, modelo: modelo },
     ]);
   };
+
+    }
+    
 
   return (
     <div className='flex flex-col items-center justify-center'>
@@ -152,6 +158,7 @@ const FormularioCreacionVehiculos = ({
             onChange={(e) => {
               setNombre(e.target.value);
             }}
+            required
           />
         </label>
         <label className='flex flex-col' htmlFor='marca'>
@@ -163,6 +170,7 @@ const FormularioCreacionVehiculos = ({
             }}
             className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
             name='marca'
+            required
           >
             <option disabled>Seleccione una opción</option>
             <option>Renault</option>
@@ -185,10 +193,11 @@ const FormularioCreacionVehiculos = ({
             onChange={(e) => {
               setModelo(e.target.value);
             }}
+            required
           />
         </label>
         <button
-          type='button'
+          type='submit'
           className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
           onClick={() => {
             enviarAlBackend();
