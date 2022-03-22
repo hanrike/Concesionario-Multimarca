@@ -1,3 +1,4 @@
+import React,{useState,useEffect} from 'react';
 import PrivateLayout from 'layouts/PrivateLayout';
 import PublicLayout from 'layouts/PublicLayout';
 import Index from 'pages/Index';
@@ -8,10 +9,18 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'styles/styles.css';
 import Registro from 'pages/auth/Registro';
 import AuthLayout from 'layouts/AuthLayout';
+import {DarkModeContext} from 'context/darkMode'
+
+
 
 function App() {
+  const [darkMode,setDarkMode]=useState(false);
+  useEffect(()=>{
+    console.log('modo Dark:',darkMode);
+  },[darkMode]);
   return (
     <div className='App'>
+      <DarkModeContext.Provider value={{darkMode,setDarkMode}}>
       <Router>
         <Switch>
           <Route path={['/admin', '/admin/vehiculos']}>
@@ -47,6 +56,8 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </DarkModeContext.Provider>
+      
     </div>
   );
 }
