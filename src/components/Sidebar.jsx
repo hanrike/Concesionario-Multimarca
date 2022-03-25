@@ -3,6 +3,8 @@ import ImagenLogo from './ImagenLogo';
 import TriggerDarkMode from './TriggerDarkMode';
 import { Link } from 'react-router-dom';
 import 'styles/responsive.css';
+import useActiveRoute from 'hooks/useActiveRoute';
+
 
 const Sidebar = () => {
   return (
@@ -10,11 +12,13 @@ const Sidebar = () => {
       <Link to='/admin'>
       <ImagenLogo/>
       </Link>
-      <button>Perfil</button>
-      <Ruta icono="fas fa-user" ruta='/admin/perfil/' nombre='Perfil'/>
+      
+      <div className='my-4'>
+        <Ruta icono="fas fa-user" ruta='/admin/perfil/' nombre='Perfil'/>
         <Ruta icono="fas fa-car" ruta='/admin/vehiculos/' nombre='Vehiculo'/>
         <Ruta icono="fas fa-cash-register" ruta='/admin/ventas/' nombre='Ventas'/>
         <Ruta icono="fas fa-users" ruta='/admin/usuarios/' nombre='Usuarios'/>
+      </div>
      <button>Cerrar Sesion</button>
     </nav>
   
@@ -23,14 +27,21 @@ const Sidebar = () => {
 };
 
 const Ruta=({icono,ruta,nombre})=>{
+  
+  const isActive=useActiveRoute(ruta);
   return(
     <Link to={ruta}>
-      <button className='p-1 my-2 bg-indigo-700 hover:bg-indigo-900 flex w-full items-center text-white rounded-md'>
+      <button 
+      className={`p-1 my-2  bg-${
+        isActive ?'indigo':'gray'
+      }-700 hover:bg-indigo-900 flex w-full items-center text-white rounded-md`}
+      >
+
         <i className={`${icono} w-10`}/>
          {nombre}
          </button>
       </Link>
-  )
-}
+  );
+};
 
 export default Sidebar;
