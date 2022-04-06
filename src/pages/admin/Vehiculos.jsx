@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import { Dialog, Tooltip } from '@material-ui/core';
 // realizar un formulario que le pida al usuario su edad y muestre un mensaje
 // que diga si el usuario es mayor de edad o no
 
@@ -84,14 +85,27 @@ const Vehiculos = () => {
 };
 
 const TablaVehiculos = ({ listaVehiculos,setEjecutarConsulta }) => {
-  
-  useEffect(() => {
-    console.log('este es el listado de vehiculos en el componente de tabla', listaVehiculos);
-  }, [listaVehiculos]);
+  const[busqueda,setBusqueda]=useState('');
+  const[vehiculosFiltrados,setVehiculosFiltrados]=useState(listaVehiculos);
 
+  useEffect(()=>{
+    
+    setVehiculosFiltrados(
+    listaVehiculos.filter(elemento=>{
+      console.log('elemento',elemento);
+      return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
+    })
+    );
+  },[busqueda,listaVehiculos]);
   
   return (
     <div className='flex flex-col items-center justify-center w-full'>
+      <input 
+      value={busqueda}
+      onChange={(e)=>setBusqueda(e.target.value)}
+      placeholder='Buscar'
+      className='border-2 border-gray-700 px-3 py-1 self-start rounded-md focus:outline-none focus:border-indigo-500'
+      />
       <h2 className='text-2xl font-extrabold text-gray-800'>Todos los vehículos</h2>
       
       <table className='tabla'>
@@ -104,7 +118,7 @@ const TablaVehiculos = ({ listaVehiculos,setEjecutarConsulta }) => {
           </tr>
         </thead>
         <tbody>
-          {listaVehiculos.map((vehiculo) => {
+          {vehiculosFiltrados.map((vehiculo) => {
             return <FilaVehiculo key={nanoid()} vehiculo={vehiculo} setEjecutarConsulta={setEjecutarConsulta} />;
               
             
@@ -120,6 +134,7 @@ const TablaVehiculos = ({ listaVehiculos,setEjecutarConsulta }) => {
 const FilaVehiculo=([vehiculo,setEjecutarConsulta])=>{
   console.log('vehiculo',vehiculo)
   const[edit,setEdit]=useState(false);
+  const[openDialog,setOpenDialog]=useState(false)
   const[infoNuevoVehiculo,setInfoNuevoVehiculo]=useState({
     name:vehiculo.name,
     brand:vehiculo.brand,
@@ -166,11 +181,13 @@ const FilaVehiculo=([vehiculo,setEjecutarConsulta])=>{
         console.log(response.data);
         toast.success('vehiculo eliminado con exito')
         setEjecutarConsulta(true);
+        
       })
       .catch(function(error){
         console.error(error);
         toast.success('Error eliminando el vehiculo')
       });
+      setOpenDialog(false);
   };
   return(
     <tr >
@@ -215,21 +232,50 @@ const FilaVehiculo=([vehiculo,setEjecutarConsulta])=>{
         <td>
           <div className='flex w-full justify-around'>
             {edit?( 
-              
-                <i 
+            
+            <Tooltip title='Confirmar Edicion' arrow>
+            <i 
             onClick={()=>actualizarVehiculo()}
             className='fas fa-check text-green-700 hover:text-green-500'
             />
+            </Tooltip>
               
             
             ):(
+             <> 
+            <Tooltip title='Editar Vehiculo' arrow>
             <i
               onClick={()=>setEdit(!edit)} 
               className='fas fa-pencil-alt text-yellow-700 hover:text-yellow-500'
               />
-            )}
-            <i onClick={()=>eliminarVehiculo()} className='fas fa-trash text-red-700 hover:text-red-500'/>
+            </Tooltip>
+            
+            <Tooltip title='Eliminar Vehiculo' arrow >
+            <i 
+              onClick={()=>setOpenDialog(true)} 
+              className='fas fa-trash text-red-700 hover:text-red-500'
+              />
+              </Tooltip>
+              </>
+              )}
+
               </div>
+              <Dialog open={openDialog}>Hola mundo,soy un dialogo</Dialog>
+                <div className='p-8 flex flex-col'>
+                  <h1 className='text-gray-900 text-2xl font-bold'>?esta seguro de querer eliminar el vehiculo?</h1>
+                  <div className='flex w-full items-center justify-center my-4'>
+                  <button 
+                  onClick={()=>eliminarVehiculo()}
+                  className='mx-2 px-4 py-2 bg-green-500 text-white hover:bg-green-700 rounded-md shadow-md'>
+                    Si
+                    </button>
+                  <button 
+                  onClick={()=>setOpenDialog(false)}
+                  className='mx-2 px-4 py-2 bg-red-500 text-white hover:bg-green-700 rounded-md shadow-md'>
+                    No
+                    </button>
+                  </div>
+                </div>
               </td>
               </tr>
   );
@@ -331,6 +377,7 @@ const FormularioCreacionVehiculos = ({
             required
           />
         </label>
+
         <button
           type='submit'
           className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
