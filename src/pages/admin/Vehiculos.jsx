@@ -2,11 +2,6 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-<<<<<<< HEAD
-=======
-import { nanoid } from 'nanoid';
-import { Dialog, Tooltip } from '@material-ui/core';
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
 import { Dialog, Tooltip } from '@material-ui/core';
@@ -89,23 +84,9 @@ const Vehiculos = () => {
   );
 };
 
-<<<<<<< HEAD
 const TablaVehiculos = ({ listaVehiculos,setEjecutarConsulta }) => {
   const[busqueda,setBusqueda]=useState('');
   const[vehiculosFiltrados,setVehiculosFiltrados]=useState(listaVehiculos);
-=======
-const TablaVehiculos = ({ listaVehiculos, setEjecutarConsulta }) => {
-  const [busqueda, setBusqueda] = useState('');
-  const [vehiculosFiltrados, setVehiculosFiltrados] = useState(listaVehiculos);
-
-  useEffect(() => {
-    setVehiculosFiltrados(
-      listaVehiculos.filter((elemento) => {
-        return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
-      })
-    );
-  }, [busqueda, listaVehiculos]);
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
 
   useEffect(()=>{
     
@@ -119,7 +100,6 @@ const TablaVehiculos = ({ listaVehiculos, setEjecutarConsulta }) => {
   
   return (
     <div className='flex flex-col items-center justify-center w-full'>
-<<<<<<< HEAD
       <input 
       value={busqueda}
       onChange={(e)=>setBusqueda(e.target.value)}
@@ -147,54 +127,10 @@ const TablaVehiculos = ({ listaVehiculos, setEjecutarConsulta }) => {
       </table>
       
       
-=======
-      <input
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        placeholder='Buscar'
-        className='border-2 border-gray-700 px-3 py-1 self-start rounded-md focus:outline-none focus:border-indigo-500'
-      />
-      <h2 className='text-2xl font-extrabold text-gray-800'>Todos los vehículos</h2>
-      <div className='hidden md:flex w-full'>
-        <table className='tabla'>
-          <thead>
-            <tr>
-              <th>Nombre del vehículo</th>
-              <th>Marca del vehículo</th>
-              <th>Modelo del vehículo</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vehiculosFiltrados.map((vehiculo) => {
-              return (
-                <FilaVehiculo
-                  key={nanoid()}
-                  vehiculo={vehiculo}
-                  setEjecutarConsulta={setEjecutarConsulta}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className='flex flex-col w-full m-2 md:hidden'>
-        {vehiculosFiltrados.map((el) => {
-          return (
-            <div className='bg-gray-400 m-2 shadow-xl flex flex-col p-2 rounded-xl'>
-              <span>{el.name}</span>
-              <span>{el.brand}</span>
-              <span>{el.model}</span>
-            </div>
-          );
-        })}
-      </div>
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
     </div>
   );
 };
 
-<<<<<<< HEAD
 const FilaVehiculo=([vehiculo,setEjecutarConsulta])=>{
   console.log('vehiculo',vehiculo)
   const[edit,setEdit]=useState(false);
@@ -203,15 +139,6 @@ const FilaVehiculo=([vehiculo,setEjecutarConsulta])=>{
     name:vehiculo.name,
     brand:vehiculo.brand,
     model:vehiculo.model,
-=======
-const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
-  const [edit, setEdit] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [infoNuevoVehiculo, setInfoNuevoVehiculo] = useState({
-    name: vehiculo.name,
-    brand: vehiculo.brand,
-    model: vehiculo.model,
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
   });
 
   const actualizarVehiculo= async ()=>{
@@ -260,11 +187,7 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
         console.error(error);
         toast.success('Error eliminando el vehiculo')
       });
-<<<<<<< HEAD
       setOpenDialog(false);
-=======
-    setOpenDialog(false);
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
   };
   return(
     <tr >
@@ -298,7 +221,6 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
         
           </td>
         </>
-<<<<<<< HEAD
       
     ):(
       <>
@@ -356,72 +278,6 @@ const FilaVehiculo = ({ vehiculo, setEjecutarConsulta }) => {
                 </div>
               </td>
               </tr>
-=======
-      ) : (
-        <>
-          <td>{vehiculo.name}</td>
-          <td>{vehiculo.brand}</td>
-          <td>{vehiculo.model}</td>
-        </>
-      )}
-      <td>
-        <div className='flex w-full justify-around'>
-          {edit ? (
-            <>
-              <Tooltip title='Confirmar Edición' arrow>
-                <i
-                  onClick={() => actualizarVehiculo()}
-                  className='fas fa-check text-green-700 hover:text-green-500'
-                />
-              </Tooltip>
-              <Tooltip title='Cancelar edición' arrow>
-                <i
-                  onClick={() => setEdit(!edit)}
-                  className='fas fa-ban text-yellow-700 hover:text-yellow-500'
-                />
-              </Tooltip>
-            </>
-          ) : (
-            <>
-              <Tooltip title='Editar Vehículo' arrow>
-                <i
-                  onClick={() => setEdit(!edit)}
-                  className='fas fa-pencil-alt text-yellow-700 hover:text-yellow-500'
-                />
-              </Tooltip>
-              <Tooltip title='Eliminar Vehículo' arrow>
-                <i
-                  onClick={() => setOpenDialog(true)}
-                  className='fas fa-trash text-red-700 hover:text-red-500'
-                />
-              </Tooltip>
-            </>
-          )}
-        </div>
-        <Dialog open={openDialog}>
-          <div className='p-8 flex flex-col'>
-            <h1 className='text-gray-900 text-2xl font-bold'>
-              ¿Está seguro de querer eliminar el vehículo?
-            </h1>
-            <div className='flex w-full items-center justify-center my-4'>
-              <button
-                onClick={() => eliminarVehiculo()}
-                className='mx-2 px-4 py-2 bg-green-500 text-white hover:bg-green-700 rounded-md shadow-md'
-              >
-                Sí
-              </button>
-              <button
-                onClick={() => setOpenDialog(false)}
-                className='mx-2 px-4 py-2 bg-red-500 text-white hover:bg-red-700 rounded-md shadow-md'
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </Dialog>
-      </td>
-    </tr>
->>>>>>> 5c66e6a5f478987a2e1b2cd414836cdbdf8a4b0b
   );
 };
 
